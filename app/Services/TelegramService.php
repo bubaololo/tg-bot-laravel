@@ -48,7 +48,7 @@ class TelegramService
               'reply_to_message_id' => $reply_id
           ]);
     }
-    
+
     public function sendPhoto($chat_id, $file, $reply_id = null)
     {
         $fileUrl = asset("storage/$file");
@@ -62,8 +62,23 @@ class TelegramService
         );
     }
 
-    public function sendKeyboard($chat_id, $message, $buttons)
+    public function answerCallback($id) {
+       info($id);
+        $response = $this->http::log()->post(
+            self::url.$this->bot.'/answerCallbackQuery',
+            [
+               'callback_query_id' => $id,
+               'text' => 'alert',
+            ]
+        );
+
+        info($response);
+
+    }
+
+    public function sendKeyboard($chat_id, $buttons, $message = '')
     {
+        info('keyboard');
         return   $this->http::post(
             self::url.$this->bot.'/sendMessage',
             [
@@ -75,6 +90,24 @@ class TelegramService
                 'keyboard' => [
                         $buttons
                    ]
+                ],
+            ]
+        );
+    }
+    public function sendInlineKeyboard($chat_id, $buttons, $message = '')
+    {
+        return   $this->http::post(
+            self::url.$this->bot.'/sendMessage',
+            [
+                'chat_id' => $chat_id,
+               'text' => $message,
+               'parse_mode' => 'html',
+               'reply_markup' => [
+                "inline_keyboard" => [
+
+                        $buttons
+
+                ]
                 ],
             ]
         );

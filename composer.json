@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "bilfeldt/laravel-http-client-logger": "^1.2",
         "botman/botman": "^2.7",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
