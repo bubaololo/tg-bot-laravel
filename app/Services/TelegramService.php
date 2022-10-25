@@ -16,12 +16,12 @@ class TelegramService
         $this->bot = env('BOT_TOKEN');
     }
 
-    public function sendMessage($chat_id, $message)
+    public function sendMessage($message)
     {
         $this->http::post(
             self::url.$this->bot.'/sendMessage',
             [
-                'chat_id' => $chat_id,
+                'chat_id' => session('id'),
                'text' => $message,
                'parse_mode' => 'html',
                         ]
@@ -62,27 +62,27 @@ class TelegramService
         );
     }
 
-    public function answerCallback($id) {
-       info($id);
-        $response = $this->http::log()->post(
+    public function answerCallback($text) {
+     
+        $response = $this->http::post(
             self::url.$this->bot.'/answerCallbackQuery',
             [
-               'callback_query_id' => $id,
-               'text' => 'alert',
+               'callback_query_id' => session('callback'),
+               'text' => $text,
+               'show_alert' => 1,
             ]
         );
 
-        info($response);
 
     }
 
-    public function sendKeyboard($chat_id, $buttons, $message = '')
+    public function sendKeyboard($buttons, $message = '')
     {
         info('keyboard');
         return   $this->http::post(
             self::url.$this->bot.'/sendMessage',
             [
-                'chat_id' => $chat_id,
+                'chat_id' => session('id'),
                'text' => $message,
                'parse_mode' => 'html',
                'reply_markup'  => [
@@ -94,12 +94,12 @@ class TelegramService
             ]
         );
     }
-    public function sendInlineKeyboard($chat_id, $buttons, $message = '')
+    public function sendInlineKeyboard($buttons, $message = '')
     {
         return   $this->http::post(
             self::url.$this->bot.'/sendMessage',
             [
-                'chat_id' => $chat_id,
+                'chat_id' => session('id'),
                'text' => $message,
                'parse_mode' => 'html',
                'reply_markup' => [

@@ -16,7 +16,7 @@ class StartController extends Controller
             // info(print_r($request->session()->all(), true));
             // info(session('key'));
             // $message = str_replace('а','э', $message);
-            Telegram::sendMessage($id, $message);
+            Telegram::sendMessage($message);
             // $buttons = [['text' => 'button 1'], ['text' => 'button 2']];
             // Telegram::sendKeyboard($id, $message, $buttons);
             // $inlineButtons = [["text" => "Yes", "callback_data" => "ололол"],
@@ -26,17 +26,17 @@ class StartController extends Controller
             // Telegram::sendPhoto($id, $file);
 
     }
-    public function greetings($id)
+    public function greetings()
     {
             $buttons = [['text' => 'назад'], ['text' => 'на главную']];
-            Telegram::sendKeyboard($id, $buttons, 'Приветствую в этом боте!');
+            Telegram::sendKeyboard($buttons, 'Приветствую в этом боте!');
             $inlineButtons = [["text" => "Купить", "callback_data" => "купить"],
             ["text" =>"Продать", "callback_data" => "продать"]];
-            Telegram::sendInlineKeyboard($id, $inlineButtons, 'выберите ответ');
+            Telegram::sendInlineKeyboard( $inlineButtons, 'выберите ответ');
     }
 
-    public function callback($id) {
-        Telegram::answerCallback($id);
+    public function callback() {
+        Telegram::answerCallback('сообщуха');
     }
 }
 
