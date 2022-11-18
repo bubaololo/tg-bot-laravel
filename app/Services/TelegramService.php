@@ -72,8 +72,18 @@ class TelegramService
                'show_alert' => 1,
             ]
         );
+    }
 
-
+    public function poll() {
+     
+        $response = $this->http::post(
+            self::url.$this->bot.'/sendPoll',
+            [
+                'chat_id' => session('id'),
+               'question' => 'как сам?',
+               'options' => ['пойдёт', 'Хуй знает']
+            ]
+        );
     }
 
     public function sendKeyboard($buttons, $message = '')

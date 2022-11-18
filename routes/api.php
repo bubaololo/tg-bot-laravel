@@ -35,6 +35,9 @@ switch ($message) {
     case '/start':
         app('App\Http\Controllers\StartController')->greetings();
         break;
+    case '/test':
+        app('App\Services\TelegramService')->test();
+        break;
         default:
         app('App\Http\Controllers\StartController')->index($id, $message);
 }
@@ -45,8 +48,6 @@ switch ($message) {
     Session::setId($sessionId);
     $callbackId = $request->all()['callback_query']['id'];
     session(['callback' => $callbackId]);
-    info(session('callback'));
-
     app('App\Http\Controllers\StartController')->callback();
     
 }  else {
