@@ -19,7 +19,8 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Artisan::command('img', function () {
-    app()->call('App\Services\ImgService@textToImg');
+   $img = app()->call('App\Services\ImgService@renderImage');
+   info($img);
 })->purpose('generate an image');
 
 

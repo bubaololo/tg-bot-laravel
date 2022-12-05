@@ -6,66 +6,78 @@ use Illuminate\Support\Facades\Storage;
 
 class ImgService
 {
+    private static int $initialWrap = 40;
+    private static int $initialFontSize = 80;
+    private static string $image = 'monkey.jpg';
+    private static string $font = 'arial.ttf';
+    private static string $textFill = '#FFF';
+    private static string $textStroke = 'black';
+    private static int $marginLeft = 50;
+    private static int $marginTop = 60;
+    private static int $textWidth = 500;
+
 //    public function __constructor()
 //    {
 //
 //    }
 
 
-    public function textToImg($str = 'восимь лет!') :void
+    public static function renderImage($text = 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'): string
     {
-        $wrap = 40;
-        $chars = mb_strlen($str);
-
-        if ($chars > 60) {
+        $chars = mb_strlen($text);
+    $wrap = self::$initialWrap;
+        if ($chars > 60) { // 1.2
             $wrap = 50;
         }
-
-        if ($chars > 150) {
+        if ($chars > 150) { // 2.2
             $wrap = 69;
         }
-        if ($chars > 200) {
+        if ($chars > 200) { // 2.6
             $wrap = 78;
         }
-        if ($chars > 250) {
+        if ($chars > 250) { // 3.1
             $wrap = 80;
         }
-        if ($chars > 350) {
+        if ($chars > 350) { // 4.1
             $wrap = 85;
         }
-        if ($chars > 400) {
+        if ($chars > 400) { // 4.4
             $wrap = 90;
         }
-        if ($chars > 500) {
+        if ($chars > 500) { // 5.3
             $wrap = 95;
         }
-        if ($chars > 650) {
+        if ($chars > 650) { // 6.2
             $wrap = 105;
         }
-        if ($chars > 1000) {
+        if ($chars > 1000) { // 8.3
             $wrap = 120;
         }
-        $text = wordwrap($str, $wrap);
-        $fz = 80;
+
+//        $wrap = $this->initialWrap + ($chars / 5);
+//        $wrap = $chars/log($chars) + self::$initialWrap; //define where text would be wrapped
+
+        $text = wordwrap($text, $wrap);
+        $fz = self::$initialFontSize;
         $draw = new \ImagickDraw();
-        $draw->setFillColor('#FFF');
-        $draw->setStrokeColor('black');
+        $draw->setFillColor(self::$textFill);
+        $draw->setStrokeColor(self::$textStroke);
         $draw->setStrokeWidth(1);
         $draw->setTextKerning(-1);
-        $draw->setFont(Storage::path('fonts/arial.ttf'));
+        $draw->setFont(Storage::path('fonts/'. self::$font));
 //    $draw->setGravity(Imagick::GRAVITY_CENTER);
         $draw->setFontSize($fz);
-        $img = new \Imagick(Storage::path('reference_imgs/monkey.jpg'));
-        $img->annotateImage($draw, 50, 60, 0, $text);
+        $img = new \Imagick(Storage::path('reference_imgs/' . self::$image));
+        $img->annotateImage($draw, self::$marginLeft, self::$marginTop, 0, $text);
         $textWidth = $img->queryFontMetrics($draw, $text)['textWidth'];
 
-        if ($textWidth > 500) {
+        if ($textWidth > self::$textWidth) {
             $minFz = 0;
-            $maxFz = 80;
+            $maxFz = self::$initialFontSize;
             while ($minFz <= $maxFz) {
                 $mid = ($minFz + $maxFz) / 2;
                 $mid = round($mid, 0, PHP_ROUND_HALF_UP);
-                $status = isOk($mid);
+                $status = self::textWidthMatch($mid, $draw, $text);
                 if ($status) {
                     $maxFz = $mid - 1;
                 } else {
@@ -75,8 +87,8 @@ class ImgService
 
             $draw->setFontSize($minFz);
             unset($img);
-            $img = new \Imagick(Storage::path('reference_imgs/monkey.jpg'));
-            $img->annotateImage($draw, 50, 60, 0, $text);
+            $img = new \Imagick(Storage::path('reference_imgs/' . self::$image));
+            $img->annotateImage($draw, self::$marginLeft, self::$marginTop, 0, $text);
         }
         $img->setImageDepth(6);
 // $img->setOption('png:compression-level', 1);
@@ -86,7 +98,7 @@ class ImgService
 // $img->setOption('png:bit-depth', 8);
 // $img->setOption('png:color-type', 2);
         $fileName = uniqid();
-        $img->writeImage(Storage::path("ready_imgs/" . $fileName . ".jpg"));
+        $img->writeImage(Storage::path("public/ready_imgs/" . $fileName . ".jpg"));
         unset($draw);
         unset($img);
         gc_collect_cycles();
@@ -96,17 +108,17 @@ class ImgService
 //        $send_data = [
 //            'photo' => "https://cybercopy.ru/my-apps/bots/monkeybot/img/" . $fileName . ".jpg",
 //        ];
+    return env('APP_URL') . Storage::url("public/ready_imgs/" . $fileName . ".jpg");
     }
 
-    function isOk($mid)
+   private static function textWidthMatch($mid, $draw, $text): bool
     {
-        global $draw, $text, $img;
         $draw->setFontSize($mid);
         unset($img);
-        $img = new \Imagick(Storage::path('reference_imgs/monkey.jpg'));
-        $img->annotateImage($draw, 50, 60, 0, $text);
+        $img = new \Imagick(Storage::path('reference_imgs/' . self::$image));
+        $img->annotateImage($draw, self::$marginLeft, self::$marginTop, 0, $text);
         $textWidth = $img->queryFontMetrics($draw, $text)['textWidth'];
-        if (($textWidth) < 500) {
+        if (($textWidth) < self::$textWidth) {
             return false;
         } else return true;
     }
