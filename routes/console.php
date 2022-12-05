@@ -19,8 +19,10 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Artisan::command('img', function () {
-   $img = app()->call('App\Services\ImgService@renderImage');
-   info($img);
+   $img = app()->make('App\Services\Carl');
+
+
+   info(app()->call([$img, 'renderImage'], ['text' => 'восимь лет!']));
 })->purpose('generate an image');
 
 

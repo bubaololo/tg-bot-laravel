@@ -6,15 +6,15 @@ use Illuminate\Support\Facades\Storage;
 
 class ImgService
 {
-    private static int $initialWrap = 40;
-    private static int $initialFontSize = 80;
-    private static string $image = 'monkey.jpg';
-    private static string $font = 'arial.ttf';
-    private static string $textFill = '#FFF';
-    private static string $textStroke = 'black';
-    private static int $marginLeft = 50;
-    private static int $marginTop = 60;
-    private static int $textWidth = 500;
+    public static int $initialWrap = 40;
+    public static int $initialFontSize = 80;
+    public static string $image = 'monkey.jpg';
+    public static string $font = 'arial.ttf';
+    public static string $textFill = '#FFF';
+    public static string $textStroke = 'black';
+    public static int $marginLeft = 50;
+    public static int $marginTop = 80;
+    public static int $textWidth = 500;
 
 //    public function __constructor()
 //    {
@@ -22,10 +22,10 @@ class ImgService
 //    }
 
 
-    public static function renderImage($text = 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'): string
+    public static function renderImage($text): string
     {
         $chars = mb_strlen($text);
-    $wrap = self::$initialWrap;
+    $wrap = static::$initialWrap;
         if ($chars > 60) { // 1.2
             $wrap = 50;
         }
@@ -58,26 +58,26 @@ class ImgService
 //        $wrap = $chars/log($chars) + self::$initialWrap; //define where text would be wrapped
 
         $text = wordwrap($text, $wrap);
-        $fz = self::$initialFontSize;
+        $fz = static::$initialFontSize;
         $draw = new \ImagickDraw();
-        $draw->setFillColor(self::$textFill);
-        $draw->setStrokeColor(self::$textStroke);
+        $draw->setFillColor(static::$textFill);
+        $draw->setStrokeColor(static::$textStroke);
         $draw->setStrokeWidth(1);
         $draw->setTextKerning(-1);
-        $draw->setFont(Storage::path('fonts/'. self::$font));
+        $draw->setFont(Storage::path('fonts/'. static::$font));
 //    $draw->setGravity(Imagick::GRAVITY_CENTER);
         $draw->setFontSize($fz);
-        $img = new \Imagick(Storage::path('reference_imgs/' . self::$image));
-        $img->annotateImage($draw, self::$marginLeft, self::$marginTop, 0, $text);
+        $img = new \Imagick(Storage::path('reference_imgs/' . static::$image));
+        $img->annotateImage($draw, static::$marginLeft, static::$marginTop, 0, $text);
         $textWidth = $img->queryFontMetrics($draw, $text)['textWidth'];
 
-        if ($textWidth > self::$textWidth) {
+        if ($textWidth > static::$textWidth) {
             $minFz = 0;
-            $maxFz = self::$initialFontSize;
+            $maxFz = static::$initialFontSize;
             while ($minFz <= $maxFz) {
                 $mid = ($minFz + $maxFz) / 2;
                 $mid = round($mid, 0, PHP_ROUND_HALF_UP);
-                $status = self::textWidthMatch($mid, $draw, $text);
+                $status = static::textWidthMatch($mid, $draw, $text);
                 if ($status) {
                     $maxFz = $mid - 1;
                 } else {
@@ -87,8 +87,8 @@ class ImgService
 
             $draw->setFontSize($minFz);
             unset($img);
-            $img = new \Imagick(Storage::path('reference_imgs/' . self::$image));
-            $img->annotateImage($draw, self::$marginLeft, self::$marginTop, 0, $text);
+            $img = new \Imagick(Storage::path('reference_imgs/' . static::$image));
+            $img->annotateImage($draw, static::$marginLeft, static::$marginTop, 0, $text);
         }
         $img->setImageDepth(6);
 // $img->setOption('png:compression-level', 1);
@@ -115,10 +115,10 @@ class ImgService
     {
         $draw->setFontSize($mid);
         unset($img);
-        $img = new \Imagick(Storage::path('reference_imgs/' . self::$image));
-        $img->annotateImage($draw, self::$marginLeft, self::$marginTop, 0, $text);
+        $img = new \Imagick(Storage::path('reference_imgs/' . static::$image));
+        $img->annotateImage($draw, static::$marginLeft, static::$marginTop, 0, $text);
         $textWidth = $img->queryFontMetrics($draw, $text)['textWidth'];
-        if (($textWidth) < self::$textWidth) {
+        if (($textWidth) < static::$textWidth) {
             return false;
         } else return true;
     }
