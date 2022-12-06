@@ -25,7 +25,7 @@ Artisan::command('img', function () {
 })->purpose('generate an image');
 
 Artisan::command('d_img', function () {
-    $d_img = app()->makeWith(\App\Services\DoubleImg::class, ['text1'=>'текст1', 'text2'=>'второй текст']);
+    $d_img = app()->makeWith(\App\Services\DoubleTextToImg::class, ['text1'=>'текст1', 'text2'=>'второй текст']);
    info(app()->call([$d_img, 'render']));
 })->purpose('generate an image');
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\ImgRender\BaseClasses;
 
 use Illuminate\Support\Facades\Storage;
 
-class DoubleImg
+class DoubleTextToImg
 {
     public static int $initialWrap = 20;
     public static int $initialFontSize = 60;
@@ -192,7 +192,7 @@ class DoubleImg
 //        $send_data = [
 //            'photo' => "https://cybercopy.ru/my-apps/bots/monkeybot/img/" . $fileName . ".jpg",
 //        ];
-        return env('APP_URL') . Storage::url("public/ready_imgs/" . $fileName . ".jpg");
+        return env('APP_URL'). Storage::url("public/ready_imgs/" . $fileName . ".jpg");
     }
 
     private static function textWidthMatch1($mid, $draw, $text): bool

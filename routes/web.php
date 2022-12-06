@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Services\DoubleImg;
+use App\ImgRender\BaseClasses\DoubleTextToImg;
+use App\ImgRender\BaseClasses\TextToImg;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,6 @@ Route::get('/', function () {
 });
 
 Route::get('img/', function () {
-$img = new DoubleImg;
- return $img->render('Читать документацию', 'сразу же пробовать тыкать') ;
+$img = new TextToImg;
+ return $img->render('Читать документацию');
 });

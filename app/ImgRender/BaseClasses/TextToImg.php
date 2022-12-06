@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\ImgRender\BaseClasses;
 
 use Illuminate\Support\Facades\Storage;
 
-class ImgService
+class TextToImg
 {
     public static int $initialWrap = 40;
     public static int $initialFontSize = 80;
@@ -16,16 +16,10 @@ class ImgService
     public static int $marginTop = 80;
     public static int $textWidth = 500;
 
-//    public function __constructor()
-//    {
-//
-//    }
-
-
-    public static function renderImage($text): string
+    public static function render($text): string
     {
         $chars = mb_strlen($text);
-    $wrap = static::$initialWrap;
+        $wrap = static::$initialWrap;
         if ($chars > 60) { // 1.2
             $wrap = 50;
         }
@@ -64,7 +58,7 @@ class ImgService
         $draw->setStrokeColor(static::$textStroke);
         $draw->setStrokeWidth(1);
         $draw->setTextKerning(-1);
-        $draw->setFont(Storage::path('fonts/'. static::$font));
+        $draw->setFont(Storage::path('fonts/' . static::$font));
 //    $draw->setGravity(Imagick::GRAVITY_CENTER);
         $draw->setFontSize($fz);
         $img = new \Imagick(Storage::path('reference_imgs/' . static::$image));
@@ -103,15 +97,11 @@ class ImgService
         unset($img);
         gc_collect_cycles();
 
+        return env('APP_URL'). Storage::url("public/ready_imgs/" . $fileName . ".jpg");
 
-//        $method = 'sendPhoto';
-//        $send_data = [
-//            'photo' => "https://cybercopy.ru/my-apps/bots/monkeybot/img/" . $fileName . ".jpg",
-//        ];
-    return env('APP_URL') . Storage::url("public/ready_imgs/" . $fileName . ".jpg");
     }
 
-   private static function textWidthMatch($mid, $draw, $text): bool
+    private static function textWidthMatch($mid, $draw, $text): bool
     {
         $draw->setFontSize($mid);
         unset($img);

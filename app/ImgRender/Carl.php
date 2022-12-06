@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\ImgRender;
+
+use App\ImgRender\BaseClasses\TextToImg;
 
 
-class Carl extends ImgService
+class Carl extends TextToImg
 {
     public static int $initialFontSize = 50;
     public static string $image = 'carl.jpg';
