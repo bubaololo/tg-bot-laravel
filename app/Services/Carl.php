@@ -11,12 +11,4 @@ class Carl extends ImgService
     public static int $marginTop = 180;
     public static int $textWidth = 300;
 
-//    public function __constructor()
-//    {
-//
-//    }
-
-
-
-
 }
