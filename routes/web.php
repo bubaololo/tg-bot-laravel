@@ -20,5 +20,5 @@ Route::get('/', function () {
 
 Route::get('img/', function () {
 $img = new DoubleImg;
-return $img->render('текст1', 'текуст2');
+ return $img->render('Читать документацию', 'сразу же пробовать тыкать') ;
 });

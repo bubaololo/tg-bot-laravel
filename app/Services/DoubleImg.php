@@ -6,17 +6,17 @@ use Illuminate\Support\Facades\Storage;
 
 class DoubleImg
 {
-    public static int $initialWrap = 40;
-    public static int $initialFontSize = 80;
-    public static string $image = 'monkey.jpg';
+    public static int $initialWrap = 20;
+    public static int $initialFontSize = 60;
+    public static string $image = 'drake.png';
     public static string $font = 'arial.ttf';
-    public static string $textFill = '#FFF';
-    public static string $textStroke = 'black';
-    public static int $marginLeft1 = 50;
-    public static int $marginTop1 = 80;
-    public static int $textWidth = 500;
-    public static int $marginLeft2 = 50;
-    public static int $marginTop2 = 230;
+    public static string $textFill = 'black';
+    public static string $textStroke = 'none';
+    public static int $marginLeft1 = 280;
+    public static int $marginTop1 = 50;
+    public static int $textWidth = 150;
+    public static int $marginLeft2 = 280;
+    public static int $marginTop2 = 280;
     public string $text1;
     public string $text2;
     public  $tempImg;
@@ -30,7 +30,7 @@ class DoubleImg
     public function render($text1,$text2)
     {
         $this->renderImage1($text1);
-        $this->renderImage2($text2);
+       return $this->renderImage2($text2);
     }
 
 
@@ -74,7 +74,7 @@ class DoubleImg
         $draw->setStrokeWidth(1);
         $draw->setTextKerning(-1);
         $draw->setFont(Storage::path('fonts/' . static::$font));
-//    $draw->setGravity(Imagick::GRAVITY_CENTER);
+//    $draw->setGravity(\Imagick::GRAVITY_CENTER);
         $draw->setFontSize($fz);
         $img = new \Imagick(Storage::path('reference_imgs/' . static::$image));
         $img->annotateImage($draw, static::$marginLeft1, static::$marginTop1, 0, $text);
@@ -139,7 +139,7 @@ class DoubleImg
         }
 
 //        $wrap = $this->initialWrap + ($chars / 5);
-//        $wrap = $chars/log($chars) + self::$initialWrap; //define where text would be wrapped
+        $wrap = $chars/log($chars) + self::$initialWrap; //define where text would be wrapped
 
         $text = wordwrap($text, $wrap);
         $fz = static::$initialFontSize;
@@ -149,10 +149,10 @@ class DoubleImg
         $draw->setStrokeWidth(1);
         $draw->setTextKerning(-1);
         $draw->setFont(Storage::path('fonts/' . static::$font));
-//    $draw->setGravity(Imagick::GRAVITY_CENTER);
+//    $draw->setGravity(\Imagick::GRAVITY_CENTER);
         $draw->setFontSize($fz);
         $img = $this->tempImg;
-        $img->annotateImage($draw, static::$marginLeft2, static::$marginTop2, 0, $text);
+//        $img->annotateImage($draw, static::$marginLeft2, static::$marginTop2, 0, $text);
         $textWidth = $img->queryFontMetrics($draw, $text)['textWidth'];
 
         if ($textWidth > static::$textWidth) {
