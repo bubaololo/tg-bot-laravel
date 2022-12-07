@@ -4,7 +4,7 @@ namespace App\ImgRender\BaseClasses;
 
 use Illuminate\Support\Facades\Storage;
 
-class TextToImg
+class SingleTextToImg implements SingleTextToImgRenderInterface
 {
     public static int $initialWrap = 40;
     public static int $initialFontSize = 80;
@@ -16,7 +16,7 @@ class TextToImg
     public static int $marginTop = 80;
     public static int $textWidth = 500;
 
-    public static function render($text): string
+    public static function render(string $text): string
     {
         $chars = mb_strlen($text);
         $wrap = static::$initialWrap;

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\ImgRender\BaseClasses\DoubleTextToImg;
-use App\ImgRender\BaseClasses\TextToImg;
+use App\ImgRender\BaseClasses\SingleTextToImg;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +20,6 @@ Route::get('/', function () {
 });
 
 Route::get('img/', function () {
-$img = new TextToImg;
- return $img->render('Читать документацию');
+$img = new SingleTextToImg;
+ return $img->render(text: 'Читать документацию');
 });

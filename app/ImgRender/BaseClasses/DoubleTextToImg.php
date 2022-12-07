@@ -4,7 +4,7 @@ namespace App\ImgRender\BaseClasses;
 
 use Illuminate\Support\Facades\Storage;
 
-class DoubleTextToImg
+class DoubleTextToImg implements DoubleTextToImgRenderInterface
 {
     public static int $initialWrap = 20;
     public static int $initialFontSize = 60;
@@ -19,7 +19,7 @@ class DoubleTextToImg
     public static int $marginTop2 = 280;
     public string $text1;
     public string $text2;
-    public  $tempImg;
+    public $tempImg;
 
     public function __constructor($text1, $text2)
     {
@@ -27,10 +27,10 @@ class DoubleTextToImg
         $this->text2 = $text2;
     }
 
-    public function render($text1,$text2)
+    public function render( string $text1, string $text2): string
     {
         $this->renderImage1($text1);
-       return $this->renderImage2($text2);
+        return $this->renderImage2($text2);
     }
 
 
@@ -139,7 +139,7 @@ class DoubleTextToImg
         }
 
 //        $wrap = $this->initialWrap + ($chars / 5);
-        $wrap = $chars/log($chars) + self::$initialWrap; //define where text would be wrapped
+        $wrap = $chars / log($chars) + self::$initialWrap; //define where text would be wrapped
 
         $text = wordwrap($text, $wrap);
         $fz = static::$initialFontSize;
@@ -192,7 +192,7 @@ class DoubleTextToImg
 //        $send_data = [
 //            'photo' => "https://cybercopy.ru/my-apps/bots/monkeybot/img/" . $fileName . ".jpg",
 //        ];
-        return env('APP_URL'). Storage::url("public/ready_imgs/" . $fileName . ".jpg");
+        return env('APP_URL') . Storage::url("public/ready_imgs/" . $fileName . ".jpg");
     }
 
     private static function textWidthMatch1($mid, $draw, $text): bool
@@ -206,6 +206,7 @@ class DoubleTextToImg
             return false;
         } else return true;
     }
+
     private static function textWidthMatch2($mid, $draw, $text): bool
     {
         $draw->setFontSize($mid);
