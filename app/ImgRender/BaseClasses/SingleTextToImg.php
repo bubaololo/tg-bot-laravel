@@ -85,12 +85,7 @@ class SingleTextToImg implements SingleTextToImgRenderInterface
             $img->annotateImage($draw, static::$marginLeft, static::$marginTop, 0, $text);
         }
         $img->setImageDepth(6);
-// $img->setOption('png:compression-level', 1);
-// $img->setOption('png:format', 'png16');
-// $img->setOption('png:bit-depth', '4');
-//    $img->setOption('png:color-type', 2);
-// $img->setOption('png:bit-depth', 8);
-// $img->setOption('png:color-type', 2);
+
         $fileName = uniqid();
         $img->writeImage(Storage::path("public/ready_imgs/" . $fileName . ".jpg"));
         unset($draw);

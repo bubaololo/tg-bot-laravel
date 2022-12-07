@@ -20,6 +20,6 @@ Route::get('/', function () {
 });
 
 Route::get('img/', function () {
-$img = new SingleTextToImg;
- return $img->render(text: 'Читать документацию');
+$img = new DoubleTextToImg;
+ return $img->render('Сначала потестить на мелкой сумме','вьебать сразу все бабки');
 });

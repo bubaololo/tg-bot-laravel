@@ -101,7 +101,7 @@ class DoubleTextToImg implements DoubleTextToImgRenderInterface
         }
         $img->setImageDepth(6);
 
-        $fileName = uniqid();
+
         $this->tempImg = $img;
 
     }
@@ -139,7 +139,7 @@ class DoubleTextToImg implements DoubleTextToImgRenderInterface
         }
 
 //        $wrap = $this->initialWrap + ($chars / 5);
-        $wrap = $chars / log($chars) + self::$initialWrap; //define where text would be wrapped
+//        $wrap = $chars / log($chars) + self::$initialWrap; //define where text would be wrapped
 
         $text = wordwrap($text, $wrap);
         $fz = static::$initialFontSize;
@@ -175,23 +175,13 @@ class DoubleTextToImg implements DoubleTextToImgRenderInterface
             $img->annotateImage($draw, static::$marginLeft2, static::$marginTop2, 0, $text);
         }
         $img->setImageDepth(6);
-// $img->setOption('png:compression-level', 1);
-// $img->setOption('png:format', 'png16');
-// $img->setOption('png:bit-depth', '4');
-//    $img->setOption('png:color-type', 2);
-// $img->setOption('png:bit-depth', 8);
-// $img->setOption('png:color-type', 2);
+
         $fileName = uniqid();
         $img->writeImage(Storage::path("public/ready_imgs/" . $fileName . ".jpg"));
         unset($draw);
         unset($img);
         gc_collect_cycles();
 
-
-//        $method = 'sendPhoto';
-//        $send_data = [
-//            'photo' => "https://cybercopy.ru/my-apps/bots/monkeybot/img/" . $fileName . ".jpg",
-//        ];
         return env('APP_URL') . Storage::url("public/ready_imgs/" . $fileName . ".jpg");
     }
 
