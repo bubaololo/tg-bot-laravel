@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\ImgRender\BaseClasses\DoubleTextToImg;
+use App\ImgRender\BaseClasses\SingleTextToImg;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('img/', function () {
+$img = new DoubleTextToImg;
+ return $img->render('Сначала потестить на мелкой сумме','вьебать сразу все бабки');
 });
