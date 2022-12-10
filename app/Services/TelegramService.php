@@ -10,6 +10,7 @@ class TelegramService
     protected $http;
     protected $bot;
     public const url = 'https://api.telegram.org/bot';
+
     public function __construct(Http $http)
     {
         $this->http = $http;
@@ -19,69 +20,70 @@ class TelegramService
     public function sendMessage($message)
     {
         $this->http::post(
-            self::url.$this->bot.'/sendMessage',
+            self::url . $this->bot . '/sendMessage',
             [
                 'chat_id' => session('id'),
-               'text' => $message,
-               'parse_mode' => 'html',
-                        ]
+                'text' => $message,
+                'parse_mode' => 'html',
+            ]
         );
     }
+
     public function editMessage($chat_id, $message, $message_id)
     {
-        return   $this->http::post(
-            self::url.$this->bot.'/editMessageText',
+        return $this->http::post(
+            self::url . $this->bot . '/editMessageText',
             [
                 'chat_id' => $chat_id,
-               'text' => $message,
-               'parse_mode' => 'html',
-               'message_id' => $message_id
-                        ]
+                'text' => $message,
+                'parse_mode' => 'html',
+                'message_id' => $message_id
+            ]
         );
     }
 
     public function sendDocument($chat_id, $file, $reply_id = null)
     {
-        return  $this->http::attach('document', Storage::get('/public/'.$file), 'document.png')
-              ->post(self::url.$this->bot.'/sendDocument', [
-              'chat_id' => $chat_id,
-              'reply_to_message_id' => $reply_id
-          ]);
+        return $this->http::attach('document', Storage::get('/public/' . $file), 'document.png')
+            ->post(self::url . $this->bot . '/sendDocument', [
+                'chat_id' => $chat_id,
+                'reply_to_message_id' => $reply_id
+            ]);
     }
 
     public function sendPhoto($chat_id, $file, $reply_id = null)
     {
         $fileUrl = asset("storage/$file");
         info($fileUrl);
-        return   $this->http::post(
-            self::url.$this->bot.'/sendPhoto',
+        return $this->http::post(
+            self::url . $this->bot . '/sendPhoto',
             [
-               'chat_id' => $chat_id,
-               'photo' => $fileUrl,
+                'chat_id' => $chat_id,
+                'photo' => $fileUrl,
             ]
         );
     }
 
-    public function answerCallback($text) {
-     
+    public function answerCallback($text)
+    {
         $response = $this->http::post(
-            self::url.$this->bot.'/answerCallbackQuery',
+            self::url . $this->bot . '/answerCallbackQuery',
             [
-               'callback_query_id' => session('callback'),
-               'text' => $text,
-               'show_alert' => 1,
+                'callback_query_id' => session('callback'),
+                'text' => $text,
+                'show_alert' => 1,
             ]
         );
     }
 
-    public function poll() {
-     
+    public function poll()
+    {
         $response = $this->http::post(
-            self::url.$this->bot.'/sendPoll',
+            self::url . $this->bot . '/sendPoll',
             [
                 'chat_id' => session('id'),
-               'question' => 'как сам?',
-               'options' => ['пойдёт', 'Хуй знает']
+                'question' => 'как сам?',
+                'options' => ['пойдёт', 'Хуй знает']
             ]
         );
     }
@@ -89,35 +91,36 @@ class TelegramService
     public function sendKeyboard($buttons, $message = '')
     {
         info('keyboard');
-        return   $this->http::post(
-            self::url.$this->bot.'/sendMessage',
+        return $this->http::post(
+            self::url . $this->bot . '/sendMessage',
             [
                 'chat_id' => session('id'),
-               'text' => $message,
-               'parse_mode' => 'html',
-               'reply_markup'  => [
-                'resize_keyboard' => true,
-                'keyboard' => [
+                'text' => $message,
+                'parse_mode' => 'html',
+                'reply_markup' => [
+                    'resize_keyboard' => true,
+                    'keyboard' => [
                         $buttons
-                   ]
+                    ]
                 ],
             ]
         );
     }
+
     public function sendInlineKeyboard($buttons, $message = '')
     {
-        return   $this->http::post(
-            self::url.$this->bot.'/sendMessage',
+        return $this->http::post(
+            self::url . $this->bot . '/sendMessage',
             [
                 'chat_id' => session('id'),
-               'text' => $message,
-               'parse_mode' => 'html',
-               'reply_markup' => [
-                "inline_keyboard" => [
+                'text' => $message,
+                'parse_mode' => 'html',
+                'reply_markup' => [
+                    "inline_keyboard" => [
 
                         $buttons
 
-                ]
+                    ]
                 ],
             ]
         );
@@ -125,15 +128,15 @@ class TelegramService
 
     public function editButtons($chat_id, $message, $button, $message_id)
     {
-        return   $this->http::post(
-            self::url.$this->bot.'/editMessageText',
+        return $this->http::post(
+            self::url . $this->bot . '/editMessageText',
             [
                 'chat_id' => $chat_id,
-               'text' => $message,
-               'parse_mode' => 'html',
-               'reply_markup'  => $button,
-               'message_id' => $message_id
-                        ]
+                'text' => $message,
+                'parse_mode' => 'html',
+                'reply_markup' => $button,
+                'message_id' => $message_id
+            ]
         );
     }
 }

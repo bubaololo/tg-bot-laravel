@@ -9,7 +9,7 @@ class StartController extends Controller
 {
     public function index($id, $message)
     {
-        
+
             // info($request->all());
             // session(['key' => 'value']);
             // $request->session()->put('step', '1');
@@ -26,7 +26,7 @@ class StartController extends Controller
             // Telegram::sendPhoto($id, $file);
 
     }
-    public function greetings()
+    public function start()
     {
             $buttons = [['text' => 'назад'], ['text' => 'на главную']];
             Telegram::sendKeyboard($buttons, 'Приветствую в этом боте!');
@@ -37,6 +37,10 @@ class StartController extends Controller
 
     public function callback() {
         Telegram::answerCallback('сообщуха');
+    }
+
+    public function router ($command) {
+        info($command);
     }
 }
 
