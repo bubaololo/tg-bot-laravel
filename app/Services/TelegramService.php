@@ -24,7 +24,7 @@ class TelegramService
         $this->http::post(
             self::url . $this->bot . '/sendMessage',
             [
-                'chat_id' => session('id'),
+                'chat_id' => session('chat_id'),
                 'text' => $message,
                 'parse_mode' => 'html',
             ]
@@ -56,11 +56,11 @@ class TelegramService
     public function sendPhoto($fileUrl, $reply_id = null): object
     {
 
-        info($fileUrl);
+        
         return $this->http::post(
             self::url . $this->bot . '/sendPhoto',
             [
-                'chat_id' => session('id'),
+                'chat_id' => session('chat_id'),
                 'photo' => $fileUrl,
             ]
         );
@@ -83,7 +83,7 @@ class TelegramService
         $response = $this->http::post(
             self::url . $this->bot . '/sendPoll',
             [
-                'chat_id' => session('id'),
+                'chat_id' => session('chat_id'),
                 'question' => 'как сам?',
                 'options' => ['пойдёт', 'Хуй знает']
             ]
@@ -100,7 +100,7 @@ class TelegramService
         return $this->http::post(
             self::url . $this->bot . '/sendMessage',
             [
-                'chat_id' => session('id'),
+                'chat_id' => session('chat_id'),
                 'text' => $this->message,
                 'parse_mode' => 'html',
                 'reply_markup' => [
@@ -123,7 +123,7 @@ class TelegramService
         return $this->http::post(
             self::url . $this->bot . '/sendMessage',
             [
-                'chat_id' => session('id'),
+                'chat_id' => session('chat_id'),
                 'text' => $this->message,
                 'parse_mode' => 'html',
                 'reply_markup' => [

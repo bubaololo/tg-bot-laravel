@@ -29,7 +29,7 @@ class StartController extends Controller
         
     }
     
-    public function start()
+    public static function start()
     {
 //            $inlineButtons = [["text" => "Купить", "callback_data" => "купить"],
 //            ["text" =>"Продать", "callback_data" => "продать"]];

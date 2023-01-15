@@ -9,7 +9,7 @@ class SendMessage extends TelegramResponce
         $this->http::post(
             self::url . $this->bot . '/sendMessage',
             [
-                'chat_id' => session('id'),
+                'chat_id' => session('chat_id'),
                 'text' => $message,
                 'parse_mode' => 'html',
             ]

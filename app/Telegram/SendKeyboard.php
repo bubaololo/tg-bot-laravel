@@ -14,7 +14,7 @@ class SendKeyboard extends TelegramResponce
         return $this->http::post(
             self::url . $this->bot . '/sendMessage',
             [
-                'chat_id' => session('id'),
+                'chat_id' => session('chat_id'),
                 'text' => $this->message,
                 'parse_mode' => 'html',
                 'reply_markup' => [
