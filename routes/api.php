@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\StartController;
-
+use App\Facades\Telegram;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,7 +48,7 @@ Route::post('/bot', function (Request $request) {
                 app('App\Http\Controllers\StartController')->index($id, $command);
         }
     } elseif (array_key_exists("callback_query", $request->all())) { //callback request
-
+        info($request->all());
         $id = $request->all()['callback_query']['from']['id'];
         $sessionId = str_pad($id, 40, "0", STR_PAD_RIGHT);
         Session::setId($sessionId);
@@ -58,5 +58,6 @@ Route::post('/bot', function (Request $request) {
 
     } else {
         info('error'); // log telegram ping request
+        Telegram::sendMessage('ошибка');
     }
 });

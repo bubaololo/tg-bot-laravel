@@ -73,7 +73,7 @@ class TelegramService
             [
                 'callback_query_id' => session('callback'),
                 'text' => $text,
-                'show_alert' => 1,
+                'show_alert' => 0,
             ]
         );
     }
@@ -92,6 +92,7 @@ class TelegramService
 
     public function sendKeyboard(...$buttons)
     {
+       
         $buttonsArray = [];
         foreach ($buttons as $button) {
             $buttonsArray[] = ['text' => $button];
@@ -105,25 +106,31 @@ class TelegramService
                 'reply_markup' => [
                     'resize_keyboard' => true,
                     'keyboard' => [
-                        $buttons
+                        $buttonsArray
                     ]
                 ],
             ]
         );
     }
 
-    public function sendInlineKeyboard($buttons, $message = '')
+    public function sendInlineKeyboard(...$buttons)
     {
+        $buttonsArray = [];
+        foreach ($buttons as $button) {
+            $buttonsArray[] = ['text' => $button];
+        }
+        
         return $this->http::post(
             self::url . $this->bot . '/sendMessage',
             [
                 'chat_id' => session('id'),
-                'text' => $message,
+                'text' => $this->message,
                 'parse_mode' => 'html',
                 'reply_markup' => [
                     "inline_keyboard" => [
-
-                        $buttons
+    
+                        [["text" => "Yes", "callback_data" => "ололол"],
+                             ["text" =>"No", "callback_data" => "ыываыва"]]
 
                     ]
                 ],
