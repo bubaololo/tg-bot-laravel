@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ContextRouter extends Controller
 {
-    public static function index()
+    public static function index($context)
     {
         
-        switch (session('context')) {
+        switch ($context) {
             case 'img2':
-                switch (session('step')) {
+                switch (Cache::tags([session('chat_id')])->get('step')) {
                     case 1:
                         RenderController::img2(1);
                         break;

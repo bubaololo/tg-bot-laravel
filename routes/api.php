@@ -3,11 +3,12 @@
 use App\Http\Controllers\ContextRouter;
 use App\Http\Controllers\RenderController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\StartController;
 use App\Facades\Telegram;
-
+use Illuminate\Support\Facades\Redis;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,16 +30,17 @@ Route::post('/bot', function (Request $request) {
     
     if (array_key_exists("message", $request->all())) { //normal request
         session()->forget('_token');
-        $id = $request->all()['message']['from']['id'];
-        $sessionId = str_pad($id, 40, "0", STR_PAD_RIGHT);
+        $chat_id = $request->all()['message']['from']['id'];
+        $sessionId = str_pad($chat_id, 40, "0", STR_PAD_RIGHT);
         Session::setId($sessionId);
-        session(['chat_id' => $id]);
-        info('первая проверка в запросе'.session('context'));
-//        session(['azaza' => 'vururu']);
-        session()->get('key');
-        info(session()->all());
-        info(session()->getId());
-        if (!session('context')) { // regular command processing, if new user or user finish previous action and back to start
+//        if (Cache::has($chat_id)) {
+//            //
+//        }
+        session(['chat_id' => $chat_id]);
+        session(['message' => $request->all()['message']['text']]);
+        info('первая проверка в запросе'.Cache::tags([session('chat_id')])->get('context'));
+        
+        if (!Cache::tags([session('chat_id')])->get('context')) { // regular command processing, if new user or user finish previous action and back to start
             $command = $request->all()['message']['text'];
             switch ($command) {
                 case '/start':
@@ -46,8 +48,9 @@ Route::post('/bot', function (Request $request) {
                     break;
                 case '2':
                     session(['context' => 'img2']);
-                    session(['step' => 1]);
-                    ContextRouter::index();
+                    Cache::tags([$chat_id])->put('context', 'img2');
+                    Cache::tags([$chat_id])->put('step', 1);
+                    ContextRouter::index('img2');
                     break;
                 case '/keyboard':
                     app('App\Telegram\SendInlineKeyboard')->index('one', 'two');
@@ -56,10 +59,10 @@ Route::post('/bot', function (Request $request) {
                     app('App\Http\Controllers\StartController')->router($command);
                     break;
                 default:
-                    app('App\Http\Controllers\StartController')->index($id, $command);
+                    app('App\Http\Controllers\StartController')->index($chat_id, $command);
             }
         } else { //stateful
-        ContextRouter::index();
+        ContextRouter::index(Cache::tags([session('chat_id')])->get('context'));
         info('попал в контекст');
         }
     } elseif (array_key_exists("callback_query", $request->all())) { //callback request

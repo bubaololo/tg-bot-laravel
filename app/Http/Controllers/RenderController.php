@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Facades\Telegram;
 use App\ImgRender\Carl;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class RenderController extends Controller
 {
@@ -13,13 +14,12 @@ class RenderController extends Controller
         switch ($step) {
             case 1:
                 Telegram::sendMessage('Введите текст');
-                session(['step' => 2]);
+                Cache::tags([session('chat_id')])->put('step', 2);
                 break;
             case 2:
-                $img = Carl::render('техт из сообщения');
+                $img = Carl::render(session('message'));
                 Telegram::sendPhoto($img);
-                session()->forget('step');
-                session()->forget('context');
+                Cache::tags([session('chat_id')])->flush();
                 StartController::start();
         }
         
