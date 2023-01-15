@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use App\Facades\Telegram;
+use Illuminate\Support\Facades\Storage;
 
 class StartController extends Controller
 {
@@ -28,11 +30,13 @@ class StartController extends Controller
     }
     public function start()
     {
-            $buttons = [['text' => 'назад'], ['text' => 'на главную']];
-            Telegram::sendKeyboard($buttons, 'Приветствую в этом боте!');
-            $inlineButtons = [["text" => "Купить", "callback_data" => "купить"],
-            ["text" =>"Продать", "callback_data" => "продать"]];
-            Telegram::sendInlineKeyboard( $inlineButtons, 'выберите ответ');
+//            $inlineButtons = [["text" => "Купить", "callback_data" => "купить"],
+//            ["text" =>"Продать", "callback_data" => "продать"]];
+//            Telegram::sendInlineKeyboard( $inlineButtons, 'выберите картинку');
+        $startMessage = new TelegramService;
+        $startMessage->message = 'выберите картинку';
+        $startMessage->sendPhoto(env('APP_URL'). Storage::url("public/ready_imgs/" . "menu.jpg"));
+        $startMessage->sendKeyboard(1,2,3,4);
     }
 
     public function callback() {

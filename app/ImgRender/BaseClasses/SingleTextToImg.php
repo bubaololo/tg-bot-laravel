@@ -6,15 +6,15 @@ use Illuminate\Support\Facades\Storage;
 
 class SingleTextToImg implements SingleTextToImgRenderInterface
 {
-    public static int $initialWrap = 40;
-    public static int $initialFontSize = 80;
-    public static string $image = 'monkey.jpg';
-    public static string $font = 'arial.ttf';
-    public static string $textFill = '#FFF';
-    public static string $textStroke = 'black';
-    public static int $marginLeft = 50;
-    public static int $marginTop = 80;
-    public static int $textWidth = 500;
+    private static int $initialWrap = 40;
+    private static int $initialFontSize = 80;
+    private static string $image = 'monkey.jpg';
+    private static string $font = 'arial.ttf';
+    private static string $textFill = '#FFF';
+    private static string $textStroke = 'black';
+    private static int $marginLeft = 50;
+    private static int $marginTop = 80;
+    private static int $textWidth = 500;
 
     public static function render(string $text): string
     {

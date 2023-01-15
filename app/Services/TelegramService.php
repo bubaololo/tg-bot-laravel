@@ -9,11 +9,13 @@ class TelegramService
 {
     protected $http;
     protected $bot;
+    public $message = '';
     public const url = 'https://api.telegram.org/bot';
+    
 
-    public function __construct(Http $http)
+    public function __construct()
     {
-        $this->http = $http;
+        $this->http = new Http;
         $this->bot = env('BOT_TOKEN');
     }
 
@@ -51,14 +53,14 @@ class TelegramService
             ]);
     }
 
-    public function sendPhoto($chat_id, $file, $reply_id = null)
+    public function sendPhoto($fileUrl, $reply_id = null): object
     {
-        $fileUrl = asset("storage/$file");
+
         info($fileUrl);
         return $this->http::post(
             self::url . $this->bot . '/sendPhoto',
             [
-                'chat_id' => $chat_id,
+                'chat_id' => session('id'),
                 'photo' => $fileUrl,
             ]
         );
@@ -88,14 +90,17 @@ class TelegramService
         );
     }
 
-    public function sendKeyboard($buttons, $message = '')
+    public function sendKeyboard(...$buttons)
     {
-        info('keyboard');
+        $buttonsArray = [];
+        foreach ($buttons as $button) {
+            $buttonsArray[] = ['text' => $button];
+        }
         return $this->http::post(
             self::url . $this->bot . '/sendMessage',
             [
                 'chat_id' => session('id'),
-                'text' => $message,
+                'text' => $this->message,
                 'parse_mode' => 'html',
                 'reply_markup' => [
                     'resize_keyboard' => true,
