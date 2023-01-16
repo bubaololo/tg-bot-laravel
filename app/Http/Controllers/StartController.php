@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use App\Facades\Telegram;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class StartController extends Controller
@@ -34,7 +35,8 @@ class StartController extends Controller
 //            $inlineButtons = [["text" => "Купить", "callback_data" => "купить"],
 //            ["text" =>"Продать", "callback_data" => "продать"]];
 //            Telegram::sendInlineKeyboard( $inlineButtons, 'выберите картинку');
-        Telegram::sendMessage('выберите картинку');
+        Cache::tags([session('chat_id')])->flush();
+    
         Telegram::sendPhoto(env('APP_URL') . Storage::url("public/ready_imgs/" . "menu.jpg"));
         $bot = new TelegramService;
         $bot->message = 'выберите картинку';

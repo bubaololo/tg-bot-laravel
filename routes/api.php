@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\StartController;
 use App\Facades\Telegram;
 use Illuminate\Support\Facades\Redis;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,37 +39,34 @@ Route::post('/bot', function (Request $request) {
 //        }
         session(['chat_id' => $chat_id]);
         session(['message' => $request->all()['message']['text']]);
-        info('первая проверка в запросе'.Cache::tags([session('chat_id')])->get('context'));
-        
-        if()
+        info('первая проверка в запросе' . Cache::tags([session('chat_id')])->get('context'));
         
         
-        if (!Cache::tags([session('chat_id')])->get('context')) { // regular command processing, if new user or user finish previous action and back to start
-            $command = $request->all()['message']['text'];
+        $command = $request->all()['message']['text'];
+        
+        if (!Cache::tags([session('chat_id')])->get('context') || $command == '/start' ) { // regular command processing, if new user or user finish previous action and back to start
+            info('попал в блок команд');
             switch ($command) {
                 case '/start':
                     StartController::start();
                     break;
                 case '1':
-                    session(['context' => 'img1']);
                     Cache::tags([$chat_id])->put('context', 'img1');
                     Cache::tags([$chat_id])->put('step', 1);
                     ContextRouter::index('img1');
                     break;
                 case '2':
-                    session(['context' => 'img2']);
+                    info('попал в блок 2 роутера');
                     Cache::tags([$chat_id])->put('context', 'img2');
                     Cache::tags([$chat_id])->put('step', 1);
                     ContextRouter::index('img2');
                     break;
-                    case '3':
-                    session(['context' => 'img3']);
+                case '3':
                     Cache::tags([$chat_id])->put('context', 'img3');
                     Cache::tags([$chat_id])->put('step', 1);
                     ContextRouter::index('img3');
                     break;
                 case '4':
-                    session(['context' => 'img4']);
                     Cache::tags([$chat_id])->put('context', 'img4');
                     Cache::tags([$chat_id])->put('step', 1);
                     ContextRouter::index('img4');
@@ -83,8 +81,8 @@ Route::post('/bot', function (Request $request) {
                     app('App\Http\Controllers\StartController')->index($chat_id, $command);
             }
         } else { //stateful
-        ContextRouter::index(Cache::tags([session('chat_id')])->get('context'));
-        info('попал в контекст');
+            ContextRouter::index(Cache::tags([session('chat_id')])->get('context'));
+            info('попал в контекст');
         }
     } elseif (array_key_exists("callback_query", $request->all())) { //callback request
         $id = $request->all()['callback_query']['from']['id'];
