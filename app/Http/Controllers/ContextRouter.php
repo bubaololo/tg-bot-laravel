@@ -36,6 +36,17 @@ class ContextRouter extends Controller
                     case 2:
                         RenderController::img3(2);
                 }
+            case 'img4':
+                switch (Cache::tags([session('chat_id')])->get('step')) {
+                    case 1:
+                        RenderController::img4(1);
+                        break;
+                    case 2:
+                        RenderController::img4(2);
+                        break;
+                    case 3:
+                        RenderController::img4(3);
+                }
             
         }
         

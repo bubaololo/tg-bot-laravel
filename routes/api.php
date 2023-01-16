@@ -40,6 +40,9 @@ Route::post('/bot', function (Request $request) {
         session(['message' => $request->all()['message']['text']]);
         info('первая проверка в запросе'.Cache::tags([session('chat_id')])->get('context'));
         
+        if()
+        
+        
         if (!Cache::tags([session('chat_id')])->get('context')) { // regular command processing, if new user or user finish previous action and back to start
             $command = $request->all()['message']['text'];
             switch ($command) {
@@ -63,6 +66,12 @@ Route::post('/bot', function (Request $request) {
                     Cache::tags([$chat_id])->put('context', 'img3');
                     Cache::tags([$chat_id])->put('step', 1);
                     ContextRouter::index('img3');
+                    break;
+                case '4':
+                    session(['context' => 'img4']);
+                    Cache::tags([$chat_id])->put('context', 'img4');
+                    Cache::tags([$chat_id])->put('step', 1);
+                    ContextRouter::index('img4');
                     break;
                 case '/keyboard':
                     app('App\Telegram\SendInlineKeyboard')->index('one', 'two');
