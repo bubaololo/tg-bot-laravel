@@ -46,11 +46,23 @@ Route::post('/bot', function (Request $request) {
                 case '/start':
                     StartController::start();
                     break;
+                case '1':
+                    session(['context' => 'img1']);
+                    Cache::tags([$chat_id])->put('context', 'img1');
+                    Cache::tags([$chat_id])->put('step', 1);
+                    ContextRouter::index('img1');
+                    break;
                 case '2':
                     session(['context' => 'img2']);
                     Cache::tags([$chat_id])->put('context', 'img2');
                     Cache::tags([$chat_id])->put('step', 1);
                     ContextRouter::index('img2');
+                    break;
+                    case '3':
+                    session(['context' => 'img3']);
+                    Cache::tags([$chat_id])->put('context', 'img3');
+                    Cache::tags([$chat_id])->put('step', 1);
+                    ContextRouter::index('img3');
                     break;
                 case '/keyboard':
                     app('App\Telegram\SendInlineKeyboard')->index('one', 'two');
