@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/bot', function (Request $request) {
     
+    
     if (array_key_exists("message", $request->all())) { //normal request
         session()->forget('_token');
         $chat_id = $request->all()['message']['from']['id'];
@@ -39,11 +40,10 @@ Route::post('/bot', function (Request $request) {
 //        }
         session(['chat_id' => $chat_id]);
         session(['message' => $request->all()['message']['text']]);
-        info('первая проверка в запросе' . Cache::tags([session('chat_id')])->get('context'));
         
         
         $command = $request->all()['message']['text'];
-        
+        info($command);
         if (!Cache::tags([session('chat_id')])->get('context') || $command == '/start' ) { // regular command processing, if new user or user finish previous action and back to start
             info('попал в блок команд');
             switch ($command) {
@@ -56,7 +56,6 @@ Route::post('/bot', function (Request $request) {
                     ContextRouter::index('img1');
                     break;
                 case '2':
-                    info('попал в блок 2 роутера');
                     Cache::tags([$chat_id])->put('context', 'img2');
                     Cache::tags([$chat_id])->put('step', 1);
                     ContextRouter::index('img2');
@@ -70,6 +69,16 @@ Route::post('/bot', function (Request $request) {
                     Cache::tags([$chat_id])->put('context', 'img4');
                     Cache::tags([$chat_id])->put('step', 1);
                     ContextRouter::index('img4');
+                    break;
+                case '5':
+                    Cache::tags([$chat_id])->put('context', 'img5');
+                    Cache::tags([$chat_id])->put('step', 1);
+                    ContextRouter::index('img5');
+                    break;
+                case '6':
+                    Cache::tags([$chat_id])->put('context', 'img6');
+                    Cache::tags([$chat_id])->put('step', 1);
+                    ContextRouter::index('img6');
                     break;
                 case '/keyboard':
                     app('App\Telegram\SendInlineKeyboard')->index('one', 'two');

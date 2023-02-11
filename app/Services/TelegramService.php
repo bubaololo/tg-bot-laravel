@@ -30,6 +30,23 @@ class TelegramService
             ]
         );
     }
+    
+    public function hideKeyboard()
+    {
+        $this->http::post(
+            self::url . $this->bot . '/sendMessage',
+            [
+                'chat_id' => session('chat_id'),
+                'text' => '',
+                'parse_mode' => 'html',
+                'remove_keyboard' => 'true'
+            ]
+        );
+    }
+    
+    
+    
+    
 
     public function editMessage($chat_id, $message, $message_id)
     {
@@ -56,7 +73,7 @@ class TelegramService
     public function sendPhoto($fileUrl, $reply_id = null): object
     {
 
-        
+       
         return $this->http::post(
             self::url . $this->bot . '/sendPhoto',
             [

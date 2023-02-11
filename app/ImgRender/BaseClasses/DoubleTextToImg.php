@@ -108,6 +108,7 @@ class DoubleTextToImg implements DoubleTextToImgRenderInterface
 
     public function renderImage2($text): string
     {
+    
         $chars = mb_strlen($text);
         $wrap = static::$initialWrap;
         if ($chars > 60) { // 1.2
@@ -142,6 +143,7 @@ class DoubleTextToImg implements DoubleTextToImgRenderInterface
 //        $wrap = $chars / log($chars) + self::$initialWrap; //define where text would be wrapped
 
         $text = wordwrap($text, $wrap);
+    
         $fz = static::$initialFontSize;
         $draw = new \ImagickDraw();
         $draw->setFillColor(static::$textFill);
@@ -154,7 +156,7 @@ class DoubleTextToImg implements DoubleTextToImgRenderInterface
         $img = $this->tempImg;
 //        $img->annotateImage($draw, static::$marginLeft2, static::$marginTop2, 0, $text);
         $textWidth = $img->queryFontMetrics($draw, $text)['textWidth'];
-
+        
         if ($textWidth > static::$textWidth) {
             $minFz = 0;
             $maxFz = static::$initialFontSize;
@@ -162,18 +164,20 @@ class DoubleTextToImg implements DoubleTextToImgRenderInterface
                 $mid = ($minFz + $maxFz) / 2;
                 $mid = round($mid, 0, PHP_ROUND_HALF_UP);
                 $status = static::textWidthMatch2($mid, $draw, $text);
+        
                 if ($status) {
                     $maxFz = $mid - 1;
                 } else {
                     $minFz = $mid + 1;
                 }
             }
-
-            $draw->setFontSize($minFz);
+            $fz = $minFz;
+        }
+            $draw->setFontSize($fz);
             unset($img);
             $img = $this->tempImg;
             $img->annotateImage($draw, static::$marginLeft2, static::$marginTop2, 0, $text);
-        }
+        
         $img->setImageDepth(6);
 
         $fileName = uniqid();

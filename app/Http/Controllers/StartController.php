@@ -36,30 +36,30 @@ class StartController extends Controller
 //            ["text" =>"Продать", "callback_data" => "продать"]];
 //            Telegram::sendInlineKeyboard( $inlineButtons, 'выберите картинку');
         Cache::tags([session('chat_id')])->flush();
-    
-        Telegram::sendPhoto(env('APP_URL') . Storage::url("public/ready_imgs/" . "menu.jpg"));
+        
+        Telegram::sendPhoto(env('APP_URL') . Storage::url("public/ready_imgs/" . "menu6.jpg"));
         $bot = new TelegramService;
         $bot->message = 'выберите картинку';
 //        $bot->sendInlineKeyboard(1, 2, 3, 4);
-        $bot->sendKeyboard(1, 2, 3, 4);
-    
-
+        $bot->sendKeyboard(1, 2, 3, 4, 5, 6);
+        
+        
     }
     
-            public function callback()
-        {
-            Telegram::answerCallback('сообщуха');
-        }
+    public function callback()
+    {
+        Telegram::answerCallback('сообщуха');
+    }
+    
+    public function router($command)
+    {
+        info($command);
+    }
 
-        public function router($command)
-        {
-            info($command);
-        }
-    
-    
-    
-    
-    
+
+
+
+
 // [2022-10-19 22:43:26] local.INFO: array (
 //     'update_id' => 634261512,
 //     'message' =>
